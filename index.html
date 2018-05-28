@@ -1,0 +1,47 @@
+<div>
+    <button id='but' onclick='but()'>Start</button>
+    <p id='log'></p>
+    <script>
+        let time = 0;
+        let lastTime = 0;
+        let running = false;
+        let timeOutTimer = '';
+
+        const logger = document.getElementById('log');
+        const button = document.getElementById('but');
+        logger.textContent = time;
+
+        (function tick() {
+            setTimeout(tick, 1000);
+            updateTime();
+        })()
+
+        function updateTime() {
+            if (running) {
+                let now = Date.now();
+                time += (now - lastTime);
+                lastTime = now;
+                logger.textContent = toHMS(time);
+            }
+        }
+
+        function but() {
+            running = !running;
+            if (running) {
+                lastTime = Date.now();
+                button.textContent = 'Stop';
+            } else {
+                button.textContent = 'Start';
+            }
+        }
+
+        function toHMS(time) {
+            time = time / 1000;
+            let h = Math.trunc(time / 3600);
+            let m = Math.trunc((time - h*3600) / 60);
+            let s = Math.trunc(time - m * 60)
+            return `${h}:${m}:${s}`
+        }
+
+    </script>
+</div>
