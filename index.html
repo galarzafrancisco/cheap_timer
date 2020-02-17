@@ -1,48 +1,70 @@
-<div>
-    <button id='but' onclick='but()'>Start</button>
-    <input type="text" value="label"></input>
-    <p id='log'></p>
-    <script>
-        let time = 0;
-        let lastTime = 0;
-        let running = false;
-        let timeOutTimer = '';
+<head>
+    <!-- Materialize Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
 
-        const logger = document.getElementById('log');
-        const button = document.getElementById('but');
-        logger.textContent = time;
 
-        (function tick() {
-            setTimeout(tick, 1000);
-            updateTime();
-        })()
 
-        function updateTime() {
-            if (running) {
-                let now = Date.now();
-                time += (now - lastTime);
-                lastTime = now;
+
+<body>
+    <div class='container'>
+        <h2 class='big' id='log'></h2>
+        <button class='btn green' id='start-pause' onclick='startPause()'>Start</button>
+        <button class='btn grey' id='reset' onclick='reset()'>Reset</button>
+        <!-- <input type="text" value="label"></input> -->
+
+
+        <script>
+            let time = 0;
+            let lastTime = 0;
+            let running = false;
+    
+            const logger = document.getElementById('log');
+            const button = document.getElementById('start-pause');
+            logger.textContent = time;
+    
+            (function tick() {
+                setTimeout(tick, 100);
+                updateTime();
+            })()
+            
+            function logTime() {
                 logger.textContent = toHMS(time);
             }
-        }
-
-        function but() {
-            running = !running;
-            if (running) {
-                lastTime = Date.now();
-                button.textContent = 'Stop';
-            } else {
-                button.textContent = 'Start';
+            function updateTime() {
+                if (running) {
+                    let now = Date.now();
+                    time += (now - lastTime);
+                    lastTime = now;
+                    logTime();
+                }
             }
-        }
+    
+            function startPause() {
+                if (!running) {
+                    lastTime = Date.now();
+                    button.textContent = 'Pause';
+                    button.classList.value = 'btn red';
+                } else {
+                    button.textContent = 'Start';
+                    button.classList.value = 'btn green';
+                }
+                running = !running;
+            }
 
-        function toHMS(time) {
-            time = time / 1000;
-            let h = Math.trunc(time / 3600);
-            let m = Math.trunc((time - h*3600) / 60);
-            let s = Math.trunc(time - h*3600 - m*60);
-            return `${h}:${m}:${s}`
-        }
-
-    </script>
-</div>
+            function reset() {
+                time = 0;
+                logTime();
+            }
+    
+            function toHMS(time) {
+                time = time / 1000;
+                let h = Math.trunc(time / 3600);
+                let m = Math.trunc((time - h*3600) / 60);
+                let s = Math.trunc(time - h*3600 - m*60);
+                return `${h}:${m}:${s}`
+            }
+    
+        </script>
+    </div>    
+</body>
